@@ -7,6 +7,7 @@ import numpy as np
 import os
 
 muStar = 0.0
+cutoff = 20.0
 
 tot_charge = []
 Tc_Eliashberg_intervalley = []
@@ -46,10 +47,11 @@ for ne in np.arange(0.0, 0.3, 0.005):
     np.savetxt(a2F2_tmp, a2F_inter)
 
     info = ebmb.get(
-       tell=False,
        n=n,
        dos=DOS_file,
        a2F=a2F_tmp,
+       cutoff=cutoff,
+       tell=False,
        )
 
     print('lambda: %g (%g)' % (info['lambda'], a2F[-1, -1]))
@@ -65,6 +67,7 @@ for ne in np.arange(0.0, 0.3, 0.005):
        dos=DOS2_file,
        a2F=a2F2_tmp,
        muStar=[[0, muStar], [muStar, 0]],
+       cutoff=cutoff,
        tell=False,
        ))
 
@@ -74,6 +77,7 @@ for ne in np.arange(0.0, 0.3, 0.005):
        dos=DOS_file,
        a2F=a2F_tmp,
        muStar=muStar,
+       cutoff=cutoff,
        tell=False,
        ))
 
@@ -81,6 +85,7 @@ for ne in np.arange(0.0, 0.3, 0.005):
        program='critical',
        a2F=a2F_tmp,
        muStar=muStar,
+       cutoff=cutoff,
        tell=False,
        ))
 
@@ -89,6 +94,7 @@ for ne in np.arange(0.0, 0.3, 0.005):
        lamda=info['lambda'],
        omegaE=info['omegaLog'],
        muStar=muStar,
+       cutoff=cutoff,
        tell=False,
        ))
 
