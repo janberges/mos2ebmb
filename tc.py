@@ -9,6 +9,8 @@ import os
 muStar = 0.0
 cutoff = 20.0
 
+label = ('tc_%g' % muStar).replace('.', '')
+
 tot_charge = []
 Tc_Eliashberg_intervalley = []
 Tc_Eliashberg_DOS_a2F = []
@@ -108,6 +110,14 @@ for ne in np.arange(0.0, 0.3, 0.005):
        tell=False,
        ))
 
+with open(label + '.dat', 'w') as data:
+    data.write(('%7s' * 7 + '\n') % ('NE', 'MM', 'AD', 'CE', 'CA', 'DA', 'OD'))
+    for i in range(len(tot_charge)):
+        data.write(('%7.3f' * 7 + '\n') % (tot_charge[i], Tc_McMillan[i],
+            Tc_AllenDynes[i], Tc_Eliashberg_CDOS_Einstein[i],
+            Tc_Eliashberg_CDOS_a2F[i], Tc_Eliashberg_DOS_a2F[i],
+            Tc_Eliashberg_intervalley[i]))
+
 plt.plot(tot_charge, Tc_Eliashberg_intervalley, 'D-',
     label=r'Eliashberg: $N_i(\epsilon), \alpha^2 F_{i j}(\omega)$')
 
@@ -129,5 +139,5 @@ plt.xlabel('Total charge ($-e$)')
 plt.ylabel('Critical temperature (K)')
 plt.legend()
 
-plt.savefig(('tc_%g' % muStar).replace('.', '') + '.pdf')
+plt.savefig(label + '.pdf')
 plt.show()
