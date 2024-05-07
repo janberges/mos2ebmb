@@ -12,8 +12,8 @@ cutoff = 20.0
 tot_charge = []
 Tc_Eliashberg_intervalley = []
 Tc_Eliashberg_DOS_a2F = []
-Tc_Eliashberg_cDOS_a2F = []
-Tc_Eliashberg_cDOS_Einstein = []
+Tc_Eliashberg_CDOS_a2F = []
+Tc_Eliashberg_CDOS_Einstein = []
 Tc_McMillan = []
 Tc_AllenDynes = []
 
@@ -40,11 +40,11 @@ for ne in np.arange(0.0, 0.3, 0.005):
     a2F[:, 0] *= 1e-3
     np.savetxt(a2F_tmp, a2F)
 
-    a2F_inter = np.zeros((len(a2F), 5))
-    a2F_inter[:, 0] = a2F[:, 0]
-    a2F_inter[:, 2] = a2F[:, 1]
-    a2F_inter[:, 3] = a2F[:, 1]
-    np.savetxt(a2F2_tmp, a2F_inter)
+    a2F2 = np.zeros((len(a2F), 5))
+    a2F2[:, 0] = a2F[:, 0]
+    a2F2[:, 2] = a2F[:, 1]
+    a2F2[:, 3] = a2F[:, 1]
+    np.savetxt(a2F2_tmp, a2F2)
 
     info = ebmb.get(
        n=n,
@@ -81,7 +81,7 @@ for ne in np.arange(0.0, 0.3, 0.005):
        tell=False,
        ))
 
-    Tc_Eliashberg_cDOS_a2F.append(ebmb.get(
+    Tc_Eliashberg_CDOS_a2F.append(ebmb.get(
        program='critical',
        a2F=a2F_tmp,
        muStar=muStar,
@@ -89,7 +89,7 @@ for ne in np.arange(0.0, 0.3, 0.005):
        tell=False,
        ))
 
-    Tc_Eliashberg_cDOS_Einstein.append(ebmb.get(
+    Tc_Eliashberg_CDOS_Einstein.append(ebmb.get(
        program='critical',
        lamda=info['lambda'],
        omegaE=info['omegaLog'],
@@ -110,10 +110,10 @@ plt.plot(tot_charge, Tc_Eliashberg_intervalley, 'D-',
 plt.plot(tot_charge, Tc_Eliashberg_DOS_a2F, '*-',
     label=r'Eliashberg: $N(\epsilon), \alpha^2 F(\omega)$')
 
-plt.plot(tot_charge, Tc_Eliashberg_cDOS_a2F, 's-',
+plt.plot(tot_charge, Tc_Eliashberg_CDOS_a2F, 's-',
     label=r'Eliashberg: $N(\epsilon) = N(0), \alpha^2 F(\omega)$')
 
-plt.plot(tot_charge, Tc_Eliashberg_cDOS_Einstein, 'o-',
+plt.plot(tot_charge, Tc_Eliashberg_CDOS_Einstein, 'o-',
     label=r'Eliashberg: $N(\epsilon) = N(0), \alpha^2 F(\omega) = \lambda'
         r'\omega_{\mathrm{log}} \delta(\omega - \omega_{\mathrm{log}}) / 2$')
 
