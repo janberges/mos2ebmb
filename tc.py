@@ -60,7 +60,14 @@ for ne in np.arange(0.0, 0.3, 0.005):
     print('mu0: %g eV' % info['mu0'])
     print('mu: %g eV' % info['mu'])
 
+    Tc_McMillan.append(elphmod.eliashberg.Tc(info['lambda'], info['omegaLog'],
+        muStar))
+
+    Tc_AllenDynes.append(elphmod.eliashberg.Tc(info['lambda'], info['omegaLog'],
+        muStar, info['omega2nd'], correct=True))
+
     Tc_Eliashberg_intervalley.append(ebmb.get(
+       T=Tc_AllenDynes[-1],
        program='critical',
        bands=2,
        n=n,
@@ -72,6 +79,7 @@ for ne in np.arange(0.0, 0.3, 0.005):
        ))
 
     Tc_Eliashberg_DOS_a2F.append(ebmb.get(
+       T=Tc_AllenDynes[-1],
        program='critical',
        n=n,
        dos=DOS_file,
@@ -82,6 +90,7 @@ for ne in np.arange(0.0, 0.3, 0.005):
        ))
 
     Tc_Eliashberg_CDOS_a2F.append(ebmb.get(
+       T=Tc_AllenDynes[-1],
        program='critical',
        a2F=a2F_tmp,
        muStar=muStar,
@@ -90,6 +99,7 @@ for ne in np.arange(0.0, 0.3, 0.005):
        ))
 
     Tc_Eliashberg_CDOS_Einstein.append(ebmb.get(
+       T=Tc_AllenDynes[-1],
        program='critical',
        lamda=info['lambda'],
        omegaE=info['omegaLog'],
@@ -97,12 +107,6 @@ for ne in np.arange(0.0, 0.3, 0.005):
        cutoff=cutoff,
        tell=False,
        ))
-
-    Tc_McMillan.append(elphmod.eliashberg.Tc(info['lambda'], info['omegaLog'],
-        muStar))
-
-    Tc_AllenDynes.append(elphmod.eliashberg.Tc(info['lambda'], info['omegaLog'],
-        muStar, info['omega2nd'], correct=True))
 
 plt.plot(tot_charge, Tc_Eliashberg_intervalley, 'D-',
     label=r'Eliashberg: $N_i(\epsilon), \alpha^2 F_{i j}(\omega)$')
