@@ -2,7 +2,6 @@
 
 import ebmb
 import elphmod
-import matplotlib.pyplot as plt
 import numpy as np
 import os
 
@@ -117,27 +116,3 @@ with open(label + '.dat', 'w') as data:
             Tc_AllenDynes[i], Tc_Eliashberg_CDOS_Einstein[i],
             Tc_Eliashberg_CDOS_a2F[i], Tc_Eliashberg_DOS_a2F[i],
             Tc_Eliashberg_intervalley[i]))
-
-plt.plot(tot_charge, Tc_Eliashberg_intervalley, 'D-',
-    label=r'Eliashberg: $N_i(\epsilon), \alpha^2 F_{i j}(\omega)$')
-
-plt.plot(tot_charge, Tc_Eliashberg_DOS_a2F, '*-',
-    label=r'Eliashberg: $N(\epsilon), \alpha^2 F(\omega)$')
-
-plt.plot(tot_charge, Tc_Eliashberg_CDOS_a2F, 's-',
-    label=r'Eliashberg: $N(\epsilon) = N(0), \alpha^2 F(\omega)$')
-
-plt.plot(tot_charge, Tc_Eliashberg_CDOS_Einstein, 'o-',
-    label=r'Eliashberg: $N(\epsilon) = N(0), \alpha^2 F(\omega) = \lambda'
-        r'\omega_{\mathrm{log}} \delta(\omega - \omega_{\mathrm{log}}) / 2$')
-
-plt.plot(tot_charge, Tc_AllenDynes, '^-', label='Allen-Dynes')
-plt.plot(tot_charge, Tc_McMillan, 'v-', label='McMillan')
-
-plt.title(r'$\mu^* = %g$' % muStar)
-plt.xlabel('Total charge ($-e$)')
-plt.ylabel('Critical temperature (K)')
-plt.legend()
-
-plt.savefig(label + '.pdf')
-plt.show()

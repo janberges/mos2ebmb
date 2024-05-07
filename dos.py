@@ -10,7 +10,6 @@ nk = 313
 dw = 0.001
 
 plot_3d = False
-plot_dos = True
 
 el = elphmod.el.Model('mos2')
 mu = elphmod.el.read_Fermi_level('sc.out')
@@ -51,10 +50,8 @@ if comm.rank == 0:
             data.write('%6.3f %9.6f %9.6f\n'
                 % (w[iw], DOSz2[iw], DOS[iw] - DOSz2[iw]))
 
-    if plot_3d or plot_dos:
-        import matplotlib.pyplot as plt
-
     if plot_3d:
+        import matplotlib.pyplot as plt
         from matplotlib import cm
 
         ax = plt.axes(projection='3d')
@@ -65,9 +62,4 @@ if comm.rank == 0:
         ax.plot_surface(kx, ky, e[:, :, 0], cmap=cm.coolwarm, linewidth=0,
             antialiased=False)
 
-        plt.show()
-
-    if plot_dos:
-        plt.plot(w, DOS)
-        plt.plot(w, DOSz2)
         plt.show()
