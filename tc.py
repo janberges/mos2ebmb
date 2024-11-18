@@ -21,8 +21,8 @@ Tc_AllenDynes = []
 a2F_tmp = '/dev/shm/a2f.tmp'
 a2F2_tmp = '/dev/shm/a2f2.tmp'
 
-for ne in np.arange(0.0, 0.3, 0.005):
-    directory = 'data/dop_%s' % ('%g' % ne).replace('.', '')
+for n in np.arange(0.14, 0.3, 0.005):
+    directory = 'data/dop_%s' % ('%g' % n).replace('.', '')
     a2F_file = '%s/800K_a2f_lam_FA.txt' % directory
 
     if not os.path.exists(a2F_file):
@@ -31,11 +31,9 @@ for ne in np.arange(0.0, 0.3, 0.005):
     DOS_file = '%s/dos.dat' % directory
     DOS2_file = '%s/dos2.dat' % directory
 
-    print('tot_charge: %g' % ne)
+    print('tot_charge: %g' % n)
 
-    tot_charge.append(ne)
-
-    n = 0.5 * ne # for n = 2 all bands are filled, our DOS can hold 4 electrons
+    tot_charge.append(n)
 
     a2F = np.loadtxt(a2F_file)
     a2F[:, 0] *= 1e-3
