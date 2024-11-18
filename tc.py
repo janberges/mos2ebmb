@@ -5,7 +5,7 @@ import elphmod
 import numpy as np
 import os
 
-muStar = 0.0
+muStar = 0.13
 cutoff = 20.0
 
 label = ('tc_%g' % muStar).replace('.', '')
