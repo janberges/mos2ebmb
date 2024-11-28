@@ -6,7 +6,7 @@ import numpy as np
 
 comm = elphmod.MPI.comm
 
-colors = ['red'] + 2 * ['blue'] + 2 * ['orange', 'yellow'] + 6 * ['green']
+colors = ['red'] + 2 * ['blue'] + ['orange', 'yellow'] + 6 * ['green']
 
 el = elphmod.el.Model('mos2')
 mu = elphmod.el.read_Fermi_level('sc.out')
