@@ -3,10 +3,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-for muStar in 0.0, 0.05, 0.1, 0.15, 0.2:
+for muStar in 0.0, 0.05, 0.1, 0.13, 0.15, 0.2:
     label = ('tc_%g' % muStar).replace('.', '')
 
-    (tot_charge, Tc_McMillan, Tc_AllenDynes, Tc_Eliashberg_CDOS_Einstein,
+    (SOC, tot_charge, Tc_McMillan, Tc_AllenDynes, Tc_Eliashberg_CDOS_Einstein,
         Tc_Eliashberg_CDOS_a2F, Tc_Eliashberg_DOS_a2F,
         Tc_Eliashberg_intervalley) = np.loadtxt(label + '.dat', skiprows=1).T
 
