@@ -16,6 +16,7 @@ SOC = []
 tot_charge = []
 Tc_Eliashberg_intervalley = []
 Tc_Eliashberg_DOS_a2F = []
+Tc_Eliashberg_DOS_Einstein = []
 Tc_Eliashberg_CDOS_a2F = []
 Tc_Eliashberg_CDOS_Einstein = []
 Tc_McMillan = []
@@ -100,6 +101,18 @@ for directory in sorted(os.listdir('data')):
        tell=False,
        ))
 
+    Tc_Eliashberg_DOS_Einstein.append(ebmb.get(
+       T=Tc,
+       program='critical',
+       lamda=info['lambda'],
+       omegaE=info['omegaLog'],
+       n=n,
+       dos=DOS_file,
+       muStar=muStar,
+       cutoff=cutoff,
+       tell=False,
+       ))
+
     Tc_Eliashberg_CDOS_a2F.append(ebmb.get(
        T=Tc,
        program='critical',
@@ -120,11 +133,11 @@ for directory in sorted(os.listdir('data')):
        ))
 
 with open(label + '.dat', 'w') as data:
-    data.write(('%2s' + ' %6s' * 7 + '\n')
-        % ('SO', 'NE', 'MM', 'AD', 'CE', 'CA', 'DA', 'OD'))
+    data.write(('%2s' + ' %6s' * 8 + '\n')
+        % ('SO', 'NE', 'MM', 'AD', 'CE', 'CA', 'DE', 'DA', 'OD'))
 
     for i in range(len(tot_charge)):
-        data.write(('%2d' + ' %6.3f' * 7 + '\n') % (SOC[i], tot_charge[i],
+        data.write(('%2d' + ' %6.3f' * 8 + '\n') % (SOC[i], tot_charge[i],
             Tc_McMillan[i], Tc_AllenDynes[i], Tc_Eliashberg_CDOS_Einstein[i],
-            Tc_Eliashberg_CDOS_a2F[i], Tc_Eliashberg_DOS_a2F[i],
-            Tc_Eliashberg_intervalley[i]))
+            Tc_Eliashberg_CDOS_a2F[i], Tc_Eliashberg_DOS_Einstein[i],
+            Tc_Eliashberg_DOS_a2F[i], Tc_Eliashberg_intervalley[i]))
