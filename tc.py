@@ -8,7 +8,7 @@ import os
 muStar = 0.05
 cutoff = 20.0
 
-label = ('tc_%g' % muStar).replace('.', '')
+label = ('tc_%4.2f' % muStar).replace('.', '')
 
 SOC = []
 tot_charge = []

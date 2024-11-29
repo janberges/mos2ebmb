@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import sys
 
-dat = sys.argv[1] if len(sys.argv) > 1 else 'tc_0.dat'
+dat = sys.argv[1] if len(sys.argv) > 1 else 'tc_013.dat'
 
 (SOC, tot_charge, Tc_McMillan, Tc_AllenDynes, Tc_Eliashberg_CDOS_Einstein,
     Tc_Eliashberg_CDOS_a2F, Tc_Eliashberg_DOS_a2F,
