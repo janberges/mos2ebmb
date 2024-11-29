@@ -4,8 +4,10 @@ import ebmb
 import elphmod
 import numpy as np
 import os
+import sys
 
-muStar = 0.13
+muStar = float(sys.argv[1]) if len(sys.argv) > 1 else 0.13
+
 cutoff = 20.0
 
 label = ('tc_%4.2f' % muStar).replace('.', '')
