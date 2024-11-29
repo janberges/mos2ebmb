@@ -78,59 +78,45 @@ for directory in sorted(os.listdir('data')):
 
     Tc_AllenDynes.append(Tc)
 
+    settings = dict(
+        program='critical',
+        T=Tc,
+        cutoff=cutoff,
+        tell=False,
+        )
+
     Tc_Eliashberg_intervalley.append(ebmb.get(
-       T=Tc,
-       program='critical',
-       bands=2,
-       n=n,
-       dos=DOS2_file,
-       a2F=a2F2_tmp,
-       muStar=[[0, muStar], [muStar, 0]],
-       cutoff=cutoff,
-       tell=False,
-       ))
+        n=n,
+        dos=DOS2_file,
+        a2F=a2F2_tmp,
+        muStar=[[0, muStar], [muStar, 0]],
+        **settings))
 
     Tc_Eliashberg_DOS_a2F.append(ebmb.get(
-       T=Tc,
-       program='critical',
-       n=n,
-       dos=DOS_file,
-       a2F=a2F_tmp,
-       muStar=muStar,
-       cutoff=cutoff,
-       tell=False,
-       ))
+        n=n,
+        dos=DOS_file,
+        a2F=a2F_tmp,
+        muStar=muStar,
+        **settings))
 
     Tc_Eliashberg_DOS_Einstein.append(ebmb.get(
-       T=Tc,
-       program='critical',
-       lamda=info['lambda'],
-       omegaE=info['omegaLog'],
-       n=n,
-       dos=DOS_file,
-       muStar=muStar,
-       cutoff=cutoff,
-       tell=False,
-       ))
+        n=n,
+        dos=DOS_file,
+        lamda=info['lambda'],
+        omegaE=info['omegaLog'],
+        muStar=muStar,
+        **settings))
 
     Tc_Eliashberg_CDOS_a2F.append(ebmb.get(
-       T=Tc,
-       program='critical',
-       a2F=a2F_tmp,
-       muStar=muStar,
-       cutoff=cutoff,
-       tell=False,
-       ))
+        a2F=a2F_tmp,
+        muStar=muStar,
+        **settings))
 
     Tc_Eliashberg_CDOS_Einstein.append(ebmb.get(
-       T=Tc,
-       program='critical',
-       lamda=info['lambda'],
-       omegaE=info['omegaLog'],
-       muStar=muStar,
-       cutoff=cutoff,
-       tell=False,
-       ))
+        lamda=info['lambda'],
+        omegaE=info['omegaLog'],
+        muStar=muStar,
+        **settings))
 
 with open(label + '.dat', 'w') as data:
     data.write(('%2s' + ' %6s' * 8 + '\n')
