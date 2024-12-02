@@ -5,14 +5,10 @@ import numpy as np
 import storylines
 import sys
 
-comm = elphmod.MPI.comm
-
 x = float(sys.argv[1]) if len(sys.argv) > 1 else 0.1
 
 nk = 313
 dw = 0.001
-
-plot_3d = False
 
 el = elphmod.el.Model('mos2')
 
@@ -30,22 +26,20 @@ else:
     nspin = 1
 
 E = E[:, :, -4 * nspin:]
-U2 = (abs(U) ** 2)[:, :, d02, -4 * nspin:].sum(axis=2)
-U2z2 = (abs(U) ** 2)[:, :, dz2, -4 * nspin:].sum(axis=2)
+U202 = np.sum(abs(U[:, :, d02, -4 * nspin:]) ** 2, axis=2)
+U2z2 = np.sum(abs(U[:, :, dz2, -4 * nspin:]) ** 2, axis=2)
 
 e = np.empty((nk, nk, 2 * nspin))
 weight = np.empty((nk, nk, 2 * nspin))
 
 for k1 in range(nk):
     for k2 in range(nk):
-        indices = sorted(np.argsort(U2[k1, k2])[-2 * nspin:])
+        indices = sorted(np.argsort(U202[k1, k2])[-2 * nspin:])
         e[k1, k2, :] = E[k1, k2, indices]
-        weight[k1, k2, :] = U2z2[k1, k2, indices] / U2[k1, k2, indices]
+        weight[k1, k2, :] = U2z2[k1, k2, indices] / U202[k1, k2, indices]
 
-mu = elphmod.occupations.find_Fermi_level(x * nspin, e, 0.005 * elphmod.misc.Ry,
-        elphmod.occupations.fermi_dirac)
-
-e -= mu
+e -= elphmod.occupations.find_Fermi_level(x * nspin, e, 0.005 * elphmod.misc.Ry,
+    elphmod.occupations.fermi_dirac)
 
 w = np.array(list(storylines.multiples(e.min() - dw, e.max() + dw, dw)))
 
@@ -59,7 +53,7 @@ for n in range(2 * nspin):
 DOS /= nspin
 DOSz2 /= nspin
 
-if comm.rank == 0:
+if elphmod.MPI.comm.rank == 0:
     with open('dos.dat', 'w') as data:
         for iw in range(len(w)):
             data.write('%6.3f %9.6f\n' % (w[iw], DOS[iw]))
@@ -68,17 +62,3 @@ if comm.rank == 0:
         for iw in range(len(w)):
             data.write('%6.3f %9.6f %9.6f\n'
                 % (w[iw], DOSz2[iw], DOS[iw] - DOSz2[iw]))
-
-    if plot_3d:
-        import matplotlib.pyplot as plt
-        from matplotlib import cm
-
-        ax = plt.axes(projection='3d')
-
-        k = np.arange(nk)
-        kx, ky = np.meshgrid(k, k)
-
-        ax.plot_surface(kx, ky, e[:, :, 0], cmap=cm.coolwarm, linewidth=0,
-            antialiased=False)
-
-        plt.show()
