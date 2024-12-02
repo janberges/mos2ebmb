@@ -30,9 +30,3 @@ Einstein spectrum with the same effective coupling λ, or the valley-resolved DO
 and α²F) are computed with `python3 tc.py`, for the Coulomb pseudopotential μ\*
 set at the beginning of the script. They are saved in `tc_X.YZ.dat` and can be
 plotted with `python3 plot_tc.py tc_X.YZ.dat`.
-
-Finally, running `python3 plot_lambda_vs_dos.py` compares the electron-phonon
-coupling strength λ to the DOS at the Fermi level (to which λ is proportional)
-for different doping levels. Since there is is no clear linear relationship
-between the two quantities, changes in the phonon frequencies (softening) or
-electron-phonon matrix elements also affect λ significantly.
