@@ -49,6 +49,4 @@ plt.title(r'$\mu^* = %g$' % muStar)
 plt.xlabel('Doping electrons per cell')
 plt.ylabel('Critical temperature (K)')
 plt.legend()
-
-plt.savefig(dat.replace('.dat', '.pdf'))
 plt.show()
