@@ -4,74 +4,70 @@ import ebmb
 import elphmod
 import numpy as np
 import os
+import re
 import sys
 
 muStar = float(sys.argv[1]) if len(sys.argv) > 1 else 0.13
 
 filename = 'tc_%s.dat' % ('%4.2f' % muStar).replace('.', '')
 
-cutoff = 20.0
-
 SOC = []
-tot_charge = []
-Tc_Eliashberg_intervalley = []
-Tc_Eliashberg_DOS_a2F = []
-Tc_Eliashberg_DOS_Einstein = []
-Tc_Eliashberg_CDOS_a2F = []
-Tc_Eliashberg_CDOS_Einstein = []
+doping = []
 Tc_McMillan = []
 Tc_AllenDynes = []
-
-a2F_tmp = '/dev/shm/a2f.tmp'
-a2F2_tmp = '/dev/shm/a2f2.tmp'
+Tc_Eliashberg_CDOS_Einstein = []
+Tc_Eliashberg_CDOS_a2F = []
+Tc_Eliashberg_DOS_Einstein = []
+Tc_Eliashberg_DOS_a2F = []
+Tc_Eliashberg_intervalley = []
 
 for directory in sorted(os.listdir('data')):
-    a2F_file = 'data/%s/800K_a2f_lam_FA.txt' % directory
-
-    if not os.path.exists(a2F_file):
-        continue
-
-    n = ''.join(a for a in directory if a in '0123456789')
-    n = float(n[0] + '.' + n[1:])
+    x = float('0.' + re.search('dop_0(\d*)', directory).group(1))
 
     DOS_file = 'data/%s/dos.dat' % directory
     DOS2_file = 'data/%s/dos2.dat' % directory
 
-    a2F = np.loadtxt(a2F_file)
+    a2F_file = 'data/%s/a2f.dat' % directory
+    a2F2_file = 'data/%s/a2f2.dat' % directory
+
+    a2F = np.loadtxt('data/%s/800K_a2f_lam_FA.txt' % directory)
     a2F[:, 0] *= 1e-3
-    np.savetxt(a2F_tmp, a2F)
+    np.savetxt(a2F_file, a2F, fmt='%9.6f')
 
     a2F2 = np.zeros((len(a2F), 5))
     a2F2[:, 0] = a2F[:, 0]
     a2F2[:, 2] = a2F[:, 1]
     a2F2[:, 3] = a2F[:, 1]
-    np.savetxt(a2F2_tmp, a2F2)
+    np.savetxt(a2F2_file, a2F2, fmt='%9.6f')
+
+    general = dict(
+        n=x,
+        cutoff=20.0,
+        tell=False,
+        )
 
     info = ebmb.get(
-       n=n,
        dos=DOS_file,
-       a2F=a2F_tmp,
-       cutoff=cutoff,
-       tell=False,
-       )
+       a2F=a2F_file,
+       **general)
 
-    print('directory: %s' % directory)
-    print('tot_charge: %g' % n)
-    print('lambda: %g (%g)' % (info['lambda'], a2F[-1, -1]))
-    print('omegaLog: %g eV' % info['omegaLog'])
-    print('omega2nd: %g eV' % info['omega2nd'])
-    print('mu0: %g eV' % info['mu0'])
-    print('mu: %g eV' % info['mu'])
+    print('directory: %s (x = %g)' % (directory, x))
 
-    Tc = elphmod.eliashberg.Tc(info['lambda'], info['omegaLog'],
-        muStar, info['omega2nd'], correct=True)
+    print('lambda = %g (%g)' % (info['lambda'], a2F[-1, -1]))
+
+    for key in 'omegaLog', 'omega2nd', 'mu0', 'mu':
+        print('%s = %g eV' % (key, info[key]))
+
+    Tc = elphmod.eliashberg.Tc(info['lambda'], info['omegaLog'], muStar,
+        info['omega2nd'], correct=True)
 
     if Tc < 1:
+        print('Tc is too low!')
         continue
 
     SOC.append('soc' in directory.lower())
 
-    tot_charge.append(n)
+    doping.append(x)
 
     Tc_McMillan.append(elphmod.eliashberg.Tc(info['lambda'], info['omegaLog'],
         muStar))
@@ -81,26 +77,21 @@ for directory in sorted(os.listdir('data')):
     settings = dict(
         program='critical',
         T=Tc,
-        cutoff=cutoff,
-        tell=False,
-        )
+        **general)
 
     Tc_Eliashberg_intervalley.append(ebmb.get(
-        n=n,
         dos=DOS2_file,
-        a2F=a2F2_tmp,
+        a2F=a2F2_file,
         muStar=[[0, muStar], [muStar, 0]],
         **settings))
 
     Tc_Eliashberg_DOS_a2F.append(ebmb.get(
-        n=n,
         dos=DOS_file,
-        a2F=a2F_tmp,
+        a2F=a2F_file,
         muStar=muStar,
         **settings))
 
     Tc_Eliashberg_DOS_Einstein.append(ebmb.get(
-        n=n,
         dos=DOS_file,
         lamda=info['lambda'],
         omegaE=info['omegaLog'],
@@ -108,7 +99,7 @@ for directory in sorted(os.listdir('data')):
         **settings))
 
     Tc_Eliashberg_CDOS_a2F.append(ebmb.get(
-        a2F=a2F_tmp,
+        a2F=a2F_file,
         muStar=muStar,
         **settings))
 
@@ -122,8 +113,8 @@ with open(filename, 'w') as data:
     data.write(('%2s' + ' %6s' * 8 + '\n')
         % ('SO', 'NE', 'MM', 'AD', 'CE', 'CA', 'DE', 'DA', 'OD'))
 
-    for i in range(len(tot_charge)):
-        data.write(('%2d' + ' %6.3f' * 8 + '\n') % (SOC[i], tot_charge[i],
+    for i in range(len(doping)):
+        data.write(('%2d' + ' %6.3f' * 8 + '\n') % (SOC[i], doping[i],
             Tc_McMillan[i], Tc_AllenDynes[i], Tc_Eliashberg_CDOS_Einstein[i],
             Tc_Eliashberg_CDOS_a2F[i], Tc_Eliashberg_DOS_Einstein[i],
             Tc_Eliashberg_DOS_a2F[i], Tc_Eliashberg_intervalley[i]))
