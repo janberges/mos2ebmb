@@ -8,9 +8,9 @@ import sys
 
 muStar = float(sys.argv[1]) if len(sys.argv) > 1 else 0.13
 
-cutoff = 20.0
+filename = 'tc_%s.dat' % ('%4.2f' % muStar).replace('.', '')
 
-label = ('tc_%4.2f' % muStar).replace('.', '')
+cutoff = 20.0
 
 SOC = []
 tot_charge = []
@@ -118,7 +118,7 @@ for directory in sorted(os.listdir('data')):
         muStar=muStar,
         **settings))
 
-with open(label + '.dat', 'w') as data:
+with open(filename, 'w') as data:
     data.write(('%2s' + ' %6s' * 8 + '\n')
         % ('SO', 'NE', 'MM', 'AD', 'CE', 'CA', 'DE', 'DA', 'OD'))
 

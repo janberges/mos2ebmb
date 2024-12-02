@@ -4,11 +4,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import sys
 
-dat = sys.argv[1] if len(sys.argv) > 1 else 'tc_013.dat'
+muStar = float(sys.argv[1]) if len(sys.argv) > 1 else 0.13
+
+filename = 'tc_%s.dat' % ('%4.2f' % muStar).replace('.', '')
 
 (SOC, tot_charge, Tc_McMillan, Tc_AllenDynes, Tc_Eliashberg_CDOS_Einstein,
     Tc_Eliashberg_CDOS_a2F, Tc_Eliashberg_DOS_Einstein, Tc_Eliashberg_DOS_a2F,
-    Tc_Eliashberg_intervalley) = np.loadtxt(dat, skiprows=1).T
+    Tc_Eliashberg_intervalley) = np.loadtxt(filename, skiprows=1).T
 
 SOC = SOC.astype(bool)
 
@@ -43,6 +45,7 @@ plt.plot(tot_charge[SOC], Tc_Eliashberg_CDOS_Einstein[SOC], 'C4o-')
 plt.plot(tot_charge[SOC], Tc_AllenDynes[SOC], 'C5^-')
 plt.plot(tot_charge[SOC], Tc_McMillan[SOC], 'C6v-')
 
+plt.title(r'$\mu^* = %g$' % muStar)
 plt.xlabel('Doping electrons per cell')
 plt.ylabel('Critical temperature (K)')
 plt.legend()

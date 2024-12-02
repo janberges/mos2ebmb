@@ -26,5 +26,5 @@ The superconducting critical temperatures for different levels of approximation
 (McMillan's formula, the Allen-Dynes formula, and Eliashberg theory considering
 the full DOS or its value at the Fermi level, the full α²F or the corresponding
 Einstein spectrum, or the full valley-resolved DOS and α²F) are computed with
-`python3 tc.py` for the Coulomb pseudopotential μ\* = X.YZ chosen in the script.
-The results and can be plotted with `python3 plot_tc.py tc_XYZ.dat`.
+`python3 tc.py [μ*]`, where the Coulomb pseudopotential defaults to μ\* = 0.13.
+The results and can be plotted with `python3 plot_tc.py [μ*]`.
