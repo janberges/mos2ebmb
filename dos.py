@@ -2,10 +2,10 @@
 
 import elphmod
 import numpy as np
+import re
 import storylines
-import sys
 
-x = float(sys.argv[1]) if len(sys.argv) > 1 else 0.1
+x = float('0.' + re.search('dop_0(\d*)', __file__).group(1))
 
 nk = 313
 dw = 0.001
