@@ -2,7 +2,7 @@
 
 This directory contains the data and scripts to calculate the superconducting
 critical temperature of electron-doped MoS₂ monolayer using Eliashberg theory,
-as shown by Girotto, Berges, Poncé, and Novko (2024).
+as shown by Girotto Erhardt, Berges, Poncé, and Novko (2024).
 
 Reproducing the calculations requires version 2.0.0 of the Eliashberg solver
 [ebmb](https://github.com/janberges/ebmb) and the Python packages elphmod and
