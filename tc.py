@@ -44,7 +44,7 @@ for directory in sorted(os.listdir('data')):
         n=x,
         cutoff=20.0,
         tell=False,
-        )
+    )
 
     info = ebmb.get(
        dos=DOS_file,

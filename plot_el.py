@@ -32,6 +32,6 @@ plt.legend(handles=[
     pat.Patch(color=colors[3], label='Mo-$d_{x^2 - y^2, x y}$'),
     pat.Patch(color=colors[1], label='Mo-$d_{x z, y z}$'),
     pat.Patch(color=colors[5], label='S-$p$'),
-    ])
+])
 
 plt.show()
