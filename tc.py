@@ -22,7 +22,7 @@ Tc_Eliashberg_DOS_a2F = []
 Tc_Eliashberg_intervalley = []
 
 for directory in sorted(os.listdir('data')):
-    x = float('0.' + re.search('dop_0(\d*)', directory).group(1))
+    x = float('0.' + re.search(r'dop_0(\d*)', directory).group(1))
 
     DOS_file = 'data/%s/dos.dat' % directory
     DOS2_file = 'data/%s/dos2.dat' % directory
